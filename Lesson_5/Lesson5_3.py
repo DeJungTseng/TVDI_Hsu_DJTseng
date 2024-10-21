@@ -43,7 +43,7 @@ class Window(ThemedTk):
     #define instance function below
     def agreement_changed(self):
         message=self.agreement.get()
-        showinfo(title="Proposal Result",message=f"He said{message}")
+        showinfo(title="Proposed to her.",message=f"She Said {message}")
 
 
 # create function of the document
