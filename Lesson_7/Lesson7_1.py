@@ -31,37 +31,25 @@ class Window(ThemedTk):
         #===Botton Frame===============
         BottomFrame=ttk.Frame(self)
             #===========SelectedFrame=======================
-        selectedFrame=ttk.Frame(self,padding=[10,10,10,10])
+        self.selectedFrame=ttk.Frame(self,padding=[10,10,10,10])
         # combobox sclect county
         
         # sitenames=datasource.get_sitenames()
         
         county=datasource.get_county()
         self.selected_county = tk.StringVar() 
-        counties_cb = ttk.Combobox(selectedFrame,textvariable=self.selected_county,state='readonly')
+        counties_cb = ttk.Combobox(self.selectedFrame,textvariable=self.selected_county,state='readonly')
 
         counties_cb.configure(values=county,textvariable=self.selected_county,state='readonly')
         self.selected_county.set("請選擇城市")
 
         counties_cb.bind('<<ComboboxSelected>>', self.county_selected)
         counties_cb.pack(expand=True,anchor='n',pady=10)
-        selectedFrame.pack(side='left',expand=True,fill='y',padx=(20,0))
+        self.selectedFrame.pack(side='left',expand=True,fill='y',padx=(20,0))
             #===============End SelectedFrame================
         # ======ListBox=======
-        langs = ('Java', 'C#', 'C', 'C++', 'Python',
-         'Go', 'JavaScript', 'PHP', 'Swift')
-
-        var = tk.Variable(value=langs)
-
-        listbox = tk.Listbox(
-            selectedFrame,
-            listvariable=var,
-            height=6,
-            selectmode=tk.EXTENDED
-        )
-
-        listbox.pack(anchor='n')
-        listbox.destroy()
+        # 一開始沒有self.listbox
+        self.listbox=None
         # ======End ListBox=====
 
         # ===treeview
@@ -100,8 +88,24 @@ class Window(ThemedTk):
 
     #define instance function below
     def county_selected(self,event):
-        selected=self.selected_county.get()
-        print(selected)
+        county=self.selected_county.get()
+        print(county)
+        # listbox choose sitename:
+        #若self.listbox存在，關閉它
+        if self.listbox:
+            self.listbox.destroy()
+        sitename=datasource.get_sitenames(county)
+
+        var = tk.Variable(value=sitename)
+
+        self.listbox = tk.Listbox(
+            self.selectedFrame,
+            listvariable=var,
+            height=6,
+            selectmode=tk.EXTENDED
+            )
+
+        self.listbox.pack()
 
     def sitename_selected(self,event):
         for children in self.tree.get_children():
@@ -110,7 +114,7 @@ class Window(ThemedTk):
         
         selected=self.selected_county.get()
            
-        selected_data = datasource.get_selected_county(selected)
+        selected_data = datasource.get_sitenames(selected)
         for record in selected_data:
             self.tree.insert("", "end", values=record)
 # ===end of Window===

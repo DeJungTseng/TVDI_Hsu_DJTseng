@@ -3,16 +3,23 @@
 import requests
 import sqlite3
 # def funcName()->傳出資料類型
-def get_sitenames()->list[str]:
+def get_sitenames(county:str)->list[str]:
+    '''
+    parameter:
+        county:縣市名稱
+    output:
+        sitenames:縣市的所有測站名稱
+    '''
     conn = sqlite3.connect("aqi.db")
 
     with conn:
         cursor=conn.cursor()
         sql='''
             SELECT DISTINCT sitename
-            from records
+            FROM records 
+            WHERE county=?
             '''
-        cursor.execute(sql)
+        cursor.execute(sql,(county,))
         sitenames=[items[0] for items in cursor.fetchall() ]
         return sitenames
     
@@ -89,9 +96,9 @@ def get_selected_county(selected:str)->list[list]:
     with conn:
         cursor=conn.cursor()
         sql='''
-            SELECT sitename,date,aqi,pm25,status,lat,lon 
+            SELECT date,aqi,pm25,status,lat,lon 
             FROM records 
-            WHERE county=?
+            WHERE sitename=?
             ORDER BY date DESC ;
             '''
         cursor.execute(sql,(selected,))
