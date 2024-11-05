@@ -38,7 +38,7 @@ class Window(ThemedTk):
         sitenames_cb.bind('<<ComboboxSelected>>', self.county_selected)
         sitenames_cb.pack(anchor='n',pady=10)
 
-        self.listbox = None 
+        self.sitenameFrame = None 
         
         
 
@@ -50,13 +50,14 @@ class Window(ThemedTk):
         
 
         # define columns
-        columns = ('date', 'county', 'aqi', 'pm25','status','lat','lon')
+        columns = ('date', 'county','sitename', 'aqi', 'pm25','status','lat','lon')
 
         self.tree = ttk.Treeview(bottomFrame, columns=columns, show='headings')
 
         # define headings
         self.tree.heading('date', text='日期')
         self.tree.heading('county', text='縣市')
+        self.tree.heading('sitename', text='站點')
         self.tree.heading('aqi', text='AQI')
         self.tree.heading('pm25', text='PM25')
         self.tree.heading('status',text='狀態')
@@ -65,6 +66,7 @@ class Window(ThemedTk):
 
         self.tree.column('date', width=150,anchor="center")
         self.tree.column('county', width=80,anchor="center")
+        self.tree.column('sitename', width=80,anchor="center")
         self.tree.column('aqi', width=50,anchor="center")
         self.tree.column('pm25', width=50,anchor="center")
         self.tree.column('status', width=50,anchor="center")
@@ -89,32 +91,31 @@ class Window(ThemedTk):
         selected = self.selected_county.get()
         sitenames = datasource.get_sitename(county=selected)
         #listbox選擇站點
-        if self.listbox:
-            self.listbox.destroy()
+        if self.sitenameFrame:
+            self.sitenameFrame.destroy()
         var = tk.Variable(value=sitenames)
-        self.listbox = tk.Listbox(
-                    self.selectedFrame,
-                    listvariable=var,
-                    height=6,
-                    selectmode=tk.EXTENDED
-                )
-        self.listbox.pack()
+        self.sitenameFrame = view.SitenameFrame(master=self.selectedFrame, sitenames=sitenames) 
         # master= parent container
         # the first sitename is the argument of Class SitenameFrame, the second is the variation with value
-        self.sitenameFrame=view.SitenameFrame(master=self.selectedFrame, sitenames=sitenames)
-        self.sitenameFrame=view.SitenameFrame(master=self.selectedFrame,sitenames=sitenames)
+        # define radio_control argument to be the radio_cotton_controller
+        self.sitenameFrame=view.SitenameFrame(master=self.selectedFrame, sitenames=sitenames,radio_controller=self.radio_botton_clicked)
         self.sitenameFrame.pack()
 
 
-    def sitename_selected(self,event):
+
+    def radio_botton_clicked(self,selected_sitename:str):
+        '''
+        此method是傳遞給SitenameFrame實體
+        當SitenameFrame中的radio_button被選取時會連動執行此method
+        Parameter:
+            selected_sitename:str -> 這是被選取的站點名稱
+        '''
         for children in self.tree.get_children():
             self.tree.delete(children)
-        selected = self.selected_site.get()        
-        selected_data = datasource.get_selected_data(selected)
+       
+        selected_data = datasource.get_selected_data(selected_sitename)
         for record in selected_data:
-            self.tree.insert("", "end", values=record)
-
-    
+            self.tree.insert("", "end", values=record)  
         
  
 
