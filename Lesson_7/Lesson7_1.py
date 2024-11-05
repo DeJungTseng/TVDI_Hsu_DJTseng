@@ -114,7 +114,7 @@ class Window(ThemedTk):
         
         selected=self.selected_county.get()
            
-        selected_data = datasource.get_sitenames(selected)
+        selected_data = datasource.get_selected_county(selected)
         for record in selected_data:
             self.tree.insert("", "end", values=record)
 # ===end of Window===
