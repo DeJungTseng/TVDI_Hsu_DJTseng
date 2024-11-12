@@ -5,6 +5,7 @@ import tkinter as tk
 from ttkthemes import ThemedTk
 from tkinter.messagebox import showinfo
 import view
+from view import MyCustomDialog
 
 
 
@@ -64,6 +65,7 @@ class Window(ThemedTk):
         columns = ('date', 'county','sitename', 'aqi', 'pm25','status','lat','lon')
 
         self.tree = ttk.Treeview(rightFrame, columns=columns, show='headings')
+        self.tree.bind('<<TreeviewSelect>>', self.item_selected)
         # define headings
         self.tree.heading('date', text='日期')
         self.tree.heading('county', text='縣市')
@@ -123,6 +125,14 @@ class Window(ThemedTk):
         selected_data = datasource.get_selected_data(selected_sitename)
         for record in selected_data:
             self.tree.insert("", "end", values=record)  
+    
+    def item_selected(self, event):
+        # for treeview event binding
+        for selected_item in self.tree.selection(): #選取的item
+            record=self.tree.item(selected_item)
+            print(record['values'])
+            dialog = view.MyCustomDialog(self, title="點開之後甚麼都沒有哈哈哈")
+
         
  
 
@@ -133,3 +143,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    
