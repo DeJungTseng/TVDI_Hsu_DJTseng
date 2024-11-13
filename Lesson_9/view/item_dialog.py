@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.simpledialog import Dialog
 from tkinter import ttk
-from tkinter import Tk, Canvas, Frame, BOTH
+import tkintermapview as tkmap
 from PIL import Image, ImageTk
 
 class MyCustomDialog(Dialog):
@@ -9,26 +9,28 @@ class MyCustomDialog(Dialog):
     # record is the necessary argument to initialize this Class
 
     def __init__(self, parent, record:list, title = None):
-        print(f"今天空氣是{record}")
+        # print(f"今天空氣是{record}")
         self.date=record[0]
         self.county=record[1]
         self.sitename=record[2]
         self.aqi=record[3]
         self.pm25=record[4]
         self.status=record[5]
-        self.lon=float(record[6])
-        self.lat=float(record[7])
+        self.lat=float(record[6])
+        self.lon=float(record[7])
         # if the calss directly super().__init__, end after execute super().__init__
         super().__init__(parent=parent, title=title)
 
     def body(self, master):
-        main_frame=ttk.Frame(master,borderwidth=1,relief='groove')
-        ttk.Label(main_frame,text=self.status).pack()
+        ttk.Label(master, text=self.date,font=("Arial",18,"bold")).pack(pady=(0,20))
+        main_frame=ttk.Frame(master,borderwidth=1)
+        # ttk.Label(main_frame,text=self.status)
+        main_frame.pack()
 
         # =====Canvas Left=====
         canvas_left=tk.Canvas(main_frame,width=200,height=200)
         # get color from "https://nipponcolors.com/"
-        # canvas_left.create_rectangle(10,10,190,190,outline="#60373E", width=2)
+        canvas_left.create_rectangle(10,10,190,190,outline="#B19693", width=2)
 
         if self.aqi<=50:
             path="green.png"
@@ -42,7 +44,7 @@ class MyCustomDialog(Dialog):
         self.img=Image.open(path)
         self.image=ImageTk.PhotoImage(self.img)
         canvas_left.create_image(100, 50, image=self.image)
-        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#62592C')
+        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#B19693')
 
 
         canvas_left.pack(side='left')
@@ -50,8 +52,8 @@ class MyCustomDialog(Dialog):
 
         # =====Canvas Right=======
         canvas_right=tk.Canvas(main_frame,width=200,height=200)
-        # get color from "https://nipponcolors.com/"
-        # canvas_left.create_rectangle(10,10,190,190,outline="#60373E", width=2)
+
+        canvas_right.create_rectangle(10,10,190,190,outline="#B19693", width=2)
 
         if self.pm25<=15.4:
             path="green.png"
@@ -65,12 +67,25 @@ class MyCustomDialog(Dialog):
         self.img1=Image.open(path)
         self.image1=ImageTk.PhotoImage(self.img1)
         canvas_right.create_image(100, 50, image=self.image1)
-        canvas_right.create_text(100,150,text=f'PM2.5:{self.pm25}\n{self.pm25_status}',font=("Arial",18,"bold"),fill='#8F5A3C')
+        canvas_right.create_text(100,150,text=f'PM2.5:{self.pm25}\n{self.pm25_status}',font=("Arial",18,"bold"),fill='#B19693')
 
 
         canvas_right.pack(side='right')
 
         # =====End Canvas Right======
+
+        # ======MapFrame========
+        map_frame=ttk.Frame(master)
+        map_widget = tkmap.TkinterMapView(map_frame,
+                                         width=400,
+                                         height=400,
+                                         corner_radius=0
+                                         )
+        map_widget.set_position(self.lat, self.lon,marker=True)
+        map_widget.set_zoom(15)
+        map_widget.pack()
+        map_frame.pack()
+        # ======End Map Frame========
 
 
 
