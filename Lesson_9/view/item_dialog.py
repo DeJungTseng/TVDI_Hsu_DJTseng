@@ -29,22 +29,36 @@ class MyCustomDialog(Dialog):
         canvas_left=tk.Canvas(main_frame,width=200,height=200)
         # get color from "https://nipponcolors.com/"
         # canvas_left.create_rectangle(10,10,190,190,outline="#60373E", width=2)
-        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#0089A7')
 
         if self.aqi<=50:
-            self.image=Image.open("green.png")
-            self.green=ImageTk.PhotoImage(self.image)
-            canvas_left.create_image(100, 50, image=self.green)
+            path="green.png"
+            self.status="良好"
         elif 50<self.aqi<=100:
-            self.image=Image.open("yellow.png")
-            self.yellow=ImageTk.PhotoImage(self.image)
-            canvas_left.create_image(100, 50, image=self.yellow)
+            path="yellow.png"
+            self.status="普通"
         else :
-            self.image=Image.open("red.png")
-            self.red=ImageTk.PhotoImage(self.image)
-            canvas_left.create_image(100, 50, image=self.red)
+            path="red.png"
+            self.status="不良"
+        self.img=Image.open(path)
+        self.image=ImageTk.PhotoImage(self.img)
+        canvas_left.create_image(100, 50, image=self.image)
+        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#0089A7')
+
+
+        # if self.aqi<=50:
+        #     self.image=Image.open("green.png")
+        #     self.green=ImageTk.PhotoImage(self.image)
+        #     canvas_left.create_image(100, 50, image=self.green)
+        # elif 50<self.aqi<=100:
+        #     self.image=Image.open("yellow.png")
+        #     self.yellow=ImageTk.PhotoImage(self.image)
+        #     canvas_left.create_image(100, 50, image=self.yellow)
+        # else :
+        #     self.image=Image.open("red.png")
+        #     self.red=ImageTk.PhotoImage(self.image)
+        #     canvas_left.create_image(100, 50, image=self.red)
         canvas_left.pack(side='left')
-        # =====end Canvas_left
+        # =====end Canvas_left======
 
         canvas_right=tk.Canvas(main_frame,width=200, height=200)
         canvas_right.create_oval(10, 10, 80, 80, outline="#000",fill="#4fe", width=2)
