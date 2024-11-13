@@ -42,28 +42,35 @@ class MyCustomDialog(Dialog):
         self.img=Image.open(path)
         self.image=ImageTk.PhotoImage(self.img)
         canvas_left.create_image(100, 50, image=self.image)
-        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#0089A7')
+        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\n{self.status}',font=("Arial",18,"bold"),fill='#62592C')
 
 
-        # if self.aqi<=50:
-        #     self.image=Image.open("green.png")
-        #     self.green=ImageTk.PhotoImage(self.image)
-        #     canvas_left.create_image(100, 50, image=self.green)
-        # elif 50<self.aqi<=100:
-        #     self.image=Image.open("yellow.png")
-        #     self.yellow=ImageTk.PhotoImage(self.image)
-        #     canvas_left.create_image(100, 50, image=self.yellow)
-        # else :
-        #     self.image=Image.open("red.png")
-        #     self.red=ImageTk.PhotoImage(self.image)
-        #     canvas_left.create_image(100, 50, image=self.red)
         canvas_left.pack(side='left')
         # =====end Canvas_left======
 
-        canvas_right=tk.Canvas(main_frame,width=200, height=200)
-        canvas_right.create_oval(10, 10, 80, 80, outline="#000",fill="#4fe", width=2)
-        canvas_right.create_text(200,150,text="Good",font=("Arial",24,"bold"),fill='blue')
+        # =====Canvas Right=======
+        canvas_right=tk.Canvas(main_frame,width=200,height=200)
+        # get color from "https://nipponcolors.com/"
+        # canvas_left.create_rectangle(10,10,190,190,outline="#60373E", width=2)
+
+        if self.pm25<=15.4:
+            path="green.png"
+            self.pm25_status="良好"
+        elif 15.<self.pm25<=35.4:
+            path="yellow.png"
+            self.pm25_status="普通"
+        else :
+            path="red.png"
+            self.pm25_status="危險"
+        self.img1=Image.open(path)
+        self.image1=ImageTk.PhotoImage(self.img1)
+        canvas_right.create_image(100, 50, image=self.image1)
+        canvas_right.create_text(100,150,text=f'PM2.5:{self.pm25}\n{self.pm25_status}',font=("Arial",18,"bold"),fill='#8F5A3C')
+
+
         canvas_right.pack(side='right')
+
+        # =====End Canvas Right======
 
 
 
