@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter.simpledialog import Dialog
+from tkinter import ttk
+from tkinter import Tk, Canvas, Frame, BOTH
 
 class MyCustomDialog(Dialog):
     # arg with default value put in  the last
@@ -7,22 +9,45 @@ class MyCustomDialog(Dialog):
 
     def __init__(self, parent, record:list, title = None):
         print(f"今天空氣是{record}")
+        self.date=record[0]
+        self.county=record[1]
+        self.sitename=record[2]
+        self.aqi=record[3]
+        self.pm25=record[4]
+        self.status=record[5]
+        self.lon=float(record[6])
+        self.lat=float(record[7])
         # if the calss directly super().__init__, end after execute super().__init__
         super().__init__(parent=parent, title=title)
 
     def body(self, master):
-        # 創建對話框主體。返回應具有初始焦點的控件。
-        tk.Label(master, text="請輸入你的名字:").grid(row=0)
-        # self.name_entry get the entry
-        # tk.Entry : upon initial the window, you can key in str
-        self.name_entry = tk.Entry(master)
-        self.name_entry.grid(row=0, column=1)
-        return self.name_entry
-    
+        main_frame=ttk.Frame(master,borderwidth=1,relief='groove')
+        ttk.Label(main_frame,text=self.status).pack()
+        canvas_left=tk.Canvas(main_frame,width=200,height=200)
+        # get color from "https://nipponcolors.com/"
+        canvas_left.create_rectangle(10,10,190,190,outline="#60373E", width=2)
+        canvas_left.create_text(100,150,text=f'AQI:{self.aqi}\nstatus:{self.status}',font=("Arial",24,"bold"),fill='#0089A7')
+        canvas_left.create_oval(10, 10, 80, 80,outline="#86C166",fill="#86C166", width=2)
+        
+        canvas_left.pack(side='left')
+
+        canvas_right=tk.Canvas(main_frame,width=200, height=200)
+        canvas_right.create_oval(10, 10, 80, 80, outline="#000",fill="#4fe", width=2)
+        canvas_right.create_text(200,150,text="Good",font=("Arial",24,"bold"),fill='blue')
+        canvas_right.pack(side='right')
+
+
+
+
+        
+        main_frame.pack(expand=True,fill='x')
+
+
+        
     def apply(self):
         # 當用戶按下確定時處理數據
         print("我被按了!!!")
-        self.result = self.name_entry.get()
+
 
     def buttonbox(self):
         # Add custom buttons (overriding the default buttonbox)

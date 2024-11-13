@@ -134,7 +134,8 @@ class Window(ThemedTk):
             # initial the Class for this .py here
             # create an instance named "dialog" in the Class of MyCustonDialog in view package
             # record['values'] is to filter the key and value of ['values'] in record
-            dialog = view.MyCustomDialog(parent=self, record=record['values'], title="你好我是余仁傑")
+            # if the outer use '' the inner part should use "" to distinguish the different meaning of string.
+            dialog = view.MyCustomDialog(parent=self, title=f'{record["values"][1]}-{record["values"][2]}',record=record['values'], )
 
         
  
