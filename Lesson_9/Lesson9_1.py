@@ -130,8 +130,11 @@ class Window(ThemedTk):
         # for treeview event binding
         for selected_item in self.tree.selection(): #選取的item
             record=self.tree.item(selected_item)
-            print(record['values'])
-            dialog = view.MyCustomDialog(self, title="點開之後甚麼都沒有哈哈哈")
+            
+            # initial the Class for this .py here
+            # create an instance named "dialog" in the Class of MyCustonDialog in view package
+            # record['values'] is to filter the key and value of ['values'] in record
+            dialog = view.MyCustomDialog(parent=self, record=record['values'], title="你好我是余仁傑")
 
         
  
