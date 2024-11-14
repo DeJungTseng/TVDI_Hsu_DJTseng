@@ -82,7 +82,7 @@ class MyCustomDialog(Dialog):
                                          corner_radius=0
                                          )
         map_widget.set_position(self.lat, self.lon,marker=True)
-        map_widget.set_zoom(15)
+        map_widget.set_zoom(10)
         map_widget.pack()
         map_frame.pack()
         # ======End Map Frame========
