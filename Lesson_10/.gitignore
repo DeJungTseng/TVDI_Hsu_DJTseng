@@ -1,0 +1,4 @@
+# the file in this folder below don't upload
+
+.env
+__pycache__
