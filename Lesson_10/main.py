@@ -6,6 +6,8 @@ from ttkthemes import ThemedTk
 from tkinter.messagebox import showinfo
 import view
 from view import MyCustomDialog
+from pandas import DataFrame
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 
@@ -13,7 +15,7 @@ class Window(ThemedTk):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title('登入')
-        self.resizable(False, False)
+        #self.resizable(False, False)
         #==============style===============
         style = ttk.Style(self)
         style.configure('TopFrame.TLabel',font=('Helvetica',20))
@@ -85,9 +87,15 @@ class Window(ThemedTk):
         self.tree.column('lat', width=100,anchor="center")
         self.tree.column('lon', width=100,anchor="center")
         
-        self.tree.pack(side='right')
-        # ====End Treeview=====
+        self.tree.pack(side='top')
+            # =======End Tree view======
 
+            # ======Plot Frame======
+        self.plotFrame=ttk.Frame(rightFrame)
+        self.canvas=None # would not display canvas upon initialization
+        
+        self.plotFrame.pack(side='top')
+            # =======End Plot Frame=====       
         rightFrame.pack(side='right')
             # ======End of Right Frame=================
 
@@ -125,6 +133,18 @@ class Window(ThemedTk):
         selected_data = datasource.get_selected_data(selected_sitename)
         for record in selected_data:
             self.tree.insert("", "end", values=record)  
+
+        # current edit
+        dataframe=datasource.get_plot_data(sitename=selected_sitename)
+        axes=dataframe.plot()
+        figure=axes.get_figure()
+        if self.canvas:
+            self.canvas.get_tk_widget().destroy()
+        self.canvas = FigureCanvasTkAgg(figure, master=self.plotFrame)
+        # if there's canvas, distroy.else 
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True,pady=(20,10))
+
     
     def item_selected(self, event):
         # for treeview event binding

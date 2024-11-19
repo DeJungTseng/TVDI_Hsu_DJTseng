@@ -33,13 +33,13 @@ class MyCustomDialog(Dialog):
         canvas_left.create_rectangle(10,10,190,190,outline="#B19693", width=2)
 
         if self.aqi<=50:
-            path="green.png"
+            path="../images/green.png"
             self.status="良好"
         elif 50<self.aqi<=100:
-            path="yellow.png"
+            path="../images/yellow.png"
             self.status="普通"
         else :
-            path="red.png"
+            path="../images/red.png"
             self.status="不良"
         self.img=Image.open(path)
         self.image=ImageTk.PhotoImage(self.img)

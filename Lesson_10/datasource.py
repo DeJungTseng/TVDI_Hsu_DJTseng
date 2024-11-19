@@ -5,6 +5,9 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+from pandas import DataFrame
+import pandas as pd
+
 def get_sitename(county:str)->list[str]:
     '''
     docString
@@ -76,6 +79,29 @@ def get_selected_data(sitename:str)->list[list]:
         cursor.execute(sql,(sitename,))
         sitename_list = [list(item) for item in cursor.fetchall()]
         return sitename_list
+
+def get_plot_data(sitename:str)->DataFrame:
+    conn = sqlite3.connect("AQI.db")
+    with conn:
+            cursor = conn.cursor()        
+            sql = '''
+                select date, aqi, pm25
+                from records
+                where sitename = ?;
+            '''
+            cursor.execute(sql,(sitename,))
+            data_list=[]
+            for item in cursor.fetchall():
+                    date=item[0]
+                    aqi=item[1]
+                    pm25=item[2]
+                    {'date':date,'aqi':aqi,'pm25':pm25}
+                    data_list.append({'date':date,'aqi':aqi,'pm25':pm25})
+            df=pd.DataFrame(data_list)
+            df['date']=pd.to_datetime(df['date'])
+            # make 'date' as the index of the dataframe
+            df1=df.set_index('date')
+            return df1
     
 def download_data():
 
