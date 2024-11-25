@@ -10,6 +10,7 @@ class Window(ThemedTk):
         super().__init__(*args,**kwargs)
         #start laypot from here!
         self.title('登入你的可愛')
+        
         # ====Style===
         # create an instance named "style" in the Style class in ttk package
         style=ttk.Style(self)
