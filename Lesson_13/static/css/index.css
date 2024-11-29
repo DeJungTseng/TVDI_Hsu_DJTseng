@@ -1,0 +1,14 @@
+h1{
+    color: chartreuse;
+}
+
+h2{
+    background-color: burlywood;
+}
+.fs-4{
+    font-size: calc(1.8rem + .3vw)!important;
+    color:brown ;
+}
+.bi-apple{
+    font-size: 1.8rem;
+}
