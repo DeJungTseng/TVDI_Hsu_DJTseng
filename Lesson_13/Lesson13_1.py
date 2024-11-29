@@ -6,3 +6,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.j2")
+
+@app.route("/products")
+def products():
+    return render_template("products.j2")
