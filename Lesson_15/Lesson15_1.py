@@ -1,5 +1,6 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,request
 import datasource
+
 
 app = Flask(__name__)
 
@@ -11,9 +12,17 @@ def index():
 @app.route("/products")
 def products():
     cities:list[dict]=datasource.get_cites()
-    # print at flask terminal
-    print(cities)
-    return render_template("products.j2",cities=cities)
+    page = request.args.get('page',1, type=int)
+    per_page = 6
+    start = (page-1) * per_page
+    end = start + per_page
+    total_pages = (len(cities) + per_page - 1 ) // per_page
+    items_on_page = cities[start:end]
+    return render_template('products.j2',
+                           items_on_page=items_on_page,
+                           total_pages=total_pages,
+                           page = page)
+
 
 @app.route("/pricing")
 def pricing():
