@@ -1,0 +1,6 @@
+requests
+python-dotenv
+flask
+pydantic
+gunicorn
+psycopg2-binary
