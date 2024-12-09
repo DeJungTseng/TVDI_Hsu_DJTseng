@@ -6,3 +6,7 @@ python-dotenv
 pandas
 matplotlib
 Flask-WTF
+plotly
+dash
+dash-bootstrap-components
+dash-mantine-components
