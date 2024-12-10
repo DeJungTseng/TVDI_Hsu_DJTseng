@@ -13,10 +13,12 @@ app = Dash(__name__,external_stylesheets=dmc.styles.ALL)
 
 app.layout = dmc.MantineProvider(
     [
-        # html.H1("喵咪~", style={"textAlign": "center"})
+        
     dmc.Container(
-        html.H1("喵咪~", style={"textAlign": "center"}),
-        fluid=True # 100% width
+        html.H1(f"國家人口壽命、GDP", style={"textAlign": "center"}),
+        fluid=True, # 100% width
+        ta='center',
+        my='20'
     )
     ,
         # dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[])
@@ -31,14 +33,10 @@ app.layout = dmc.MantineProvider(
                 w=500
             )
         ,
-            dmc.Center(
-                style={"height": 200, "width": "100%"},
-                children=[
-                    dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[])
-                ]
-            )
-            
-            
+        dmc.Center(
+                    dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[]),
+                    w = 500
+                )
         ],
         direction={"base": "column", "sm": "row"},
         gap={"base": "sm", "sm": "lg"},
