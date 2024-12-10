@@ -8,10 +8,50 @@ _dash_renderer._set_react_version('18.2.0')
 df=pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
 
+
 # establish an instancs "app" in class Dash
 app = Dash(__name__,external_stylesheets=dmc.styles.ALL)
 
+# data for selected
+selected_data=[{'value':value, 'label':value} for value in df.country.unique()]
+# data for radio
 radio_data=[['pop','人口'],['lifeExp','平均壽命'],['gdpPercap','人均GDP']]
+
+
+
+
+
+
+
+
+
+# 只顯示台灣的資烙
+
+dff = df[df.country==selected_data]
+pop_diff = dff[['country', 'year', 'pop']]
+elements = pop_diff.to_dict('records')
+rows = [
+    dmc.TableTr(
+        [
+            dmc.TableTd(element["country"]),
+            dmc.TableTd(element["year"]),
+            dmc.TableTd(element["pop"]),
+
+        ]
+    )
+    for element in elements
+]
+head = dmc.TableThead(
+    dmc.TableTr(
+        [
+            dmc.TableTh("國家"),
+            dmc.TableTh("年分"),
+            dmc.TableTh("人口"),
+        ]
+    )
+)
+body = dmc.TableTbody(rows)
+caption = dmc.TableCaption("國家人口變化")
 
 app.layout = dmc.MantineProvider(
     [
@@ -34,19 +74,36 @@ app.layout = dmc.MantineProvider(
                         id="radio_item",
                         value="pop",
                         label="請選擇查詢資料",
-                        size="xl",
+                        size="sm",
                         mb=10,
                     ) 
                 ,
-                    dcc.Dropdown(df.country.unique(),value='Taiwan',id='dropdown-selection')
+                    # dcc.Dropdown(df.country.unique(),value='Taiwan',id='dropdown-selection')
+                     dmc.Select(
+                        label="請選擇國家",
+                        placeholder="請選擇1個",
+                        id="dropdown-selection",
+                        value="Taiwan",
+                        data=selected_data,
+                        w=200,
+                        mb=10,
+                    ),
                 ],
                 
             )
         ,
-        dmc.Center(
-                    dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[]),
-                    w = 500
-                )
+
+                # dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[]),
+            
+            
+        dmc.ScrollArea(
+                dmc.Table(
+                    [head, body, caption],
+                    w='100%'
+                ),
+                h=300,
+                w='50%'
+            )
         ],
         direction={"base": "column", "sm": "row"},
         gap={"base": "sm", "sm": "lg"},
