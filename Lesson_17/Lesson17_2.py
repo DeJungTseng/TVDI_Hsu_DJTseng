@@ -1,22 +1,57 @@
-from dash import Dash,html,dcc,callback,Input, Output,dash_table
+from dash import Dash,html,dcc,callback,Input, Output,dash_table,_dash_renderer
 import pandas as pd
 import plotly.express as px
+import dash_mantine_components as dmc
 
+_dash_renderer._set_react_version('18.2.0')
 
 df=pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
 
 # establish an instancs "app" in class Dash
-app = Dash(__name__)
+app = Dash(__name__,external_stylesheets=dmc.styles.ALL)
 
-app.layout = html.Div([
-    html.H1("喵咪~", style={"textAlign": "center"}),
-    dcc.RadioItems(['pop','lifeExp','gdpPercap'],value='pop',inline=True,id='radio_item'),
-    dcc.Dropdown(df.country.unique(),value='Taiwan',id='dropdown-selection'),
-    
-    dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[]),
-    dcc.Graph(id='graph-content')
-])
+app.layout = dmc.MantineProvider(
+    [
+        # html.H1("喵咪~", style={"textAlign": "center"})
+    dmc.Container(
+        html.H1("喵咪~", style={"textAlign": "center"}),
+        fluid=True # 100% width
+    )
+    ,
+        # dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[])
+    dmc.Flex(
+        [
+            dmc.Stack(
+                [
+                    dcc.RadioItems(['pop','lifeExp','gdpPercap'],value='pop',inline=True,id='radio_item')
+                ,
+                    dcc.Dropdown(df.country.unique(),value='Taiwan',id='dropdown-selection')
+                ],
+                w=500
+            )
+        ,
+            dmc.Center(
+                style={"height": 200, "width": "100%"},
+                children=[
+                    dash_table.DataTable(data=[],page_size=10,id='datatable',columns=[])
+                ]
+            )
+            
+            
+        ],
+        direction={"base": "column", "sm": "row"},
+        gap={"base": "sm", "sm": "lg"},
+        justify={"base": "center"},
+    )
+    ,
+        
+    dmc.Container(
+        dcc.Graph(id='graph-content')
+    )
+    ]
+)
+
 # 圖表顯示的物件
 @callback(    
     Output('graph-content','figure'),
