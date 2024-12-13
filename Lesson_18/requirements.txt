@@ -1,9 +1,13 @@
 requests
+ttkthemes
+Pillow
+tkintermapview
 python-dotenv
-flask
-pydantic
-gunicorn
-psycopg2-binary
+pandas
+matplotlib
 Flask-WTF
 plotly
 dash
+dash-bootstrap-components
+dash-mantine-components
+dash-iconify
