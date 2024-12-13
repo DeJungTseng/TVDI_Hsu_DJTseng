@@ -11,3 +11,13 @@ dash
 dash-bootstrap-components
 dash-mantine-components
 dash-iconify
+gunicorn
+requests
+python-dotenv
+flask
+pydantic
+gunicorn
+psycopg2-binary
+Flask-WTF
+plotly
+dash
