@@ -4,10 +4,20 @@ from flask_wtf import FlaskForm
 from wtforms import EmailField,BooleanField,PasswordField,SubmitField
 from wtforms.validators import DataRequired,Length
 import secrets
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.serving import run_simple
+from Lesson18_2 import app1
 
-
+# app:flask server
 app = Flask(__name__)
 app.config['SECRET_KEY']=secrets.token_hex(16)
+
+# app1:dash server
+# middleware: server that integrate flask app and app1
+application = DispatcherMiddleware(
+    app,
+    {"/dash": app1.server},
+)
 
 # the decorator app make the route to be html format
 @app.route("/")
@@ -62,3 +72,6 @@ def about():
 @app.route("/success")
 def success():
     return "<h1>登入成功</h1>"
+
+if __name__ == "__main__":
+    run_simple("localhost", 8080, application,use_debugger=True,use_reloader=True)
