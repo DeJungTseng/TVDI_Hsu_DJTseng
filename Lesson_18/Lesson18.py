@@ -1,16 +1,16 @@
 from flask import Flask,render_template,request,redirect,url_for
 import datasource
-from flask_wtf import FlaskForm
-from wtforms import EmailField,BooleanField,PasswordField,SubmitField
-from wtforms.validators import DataRequired,Length
+
 import secrets
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.serving import run_simple
 from Lesson18_2 import app1
+from auth import auth
 
 # app:flask server
 app = Flask(__name__)
 app.config['SECRET_KEY']=secrets.token_hex(16)
+app.register_blueprint(auth,url_prefix='/auth')
 
 # app1:dash server
 # middleware: server that integrate flask app and app1
@@ -54,16 +54,9 @@ def pricing():
                            page = page)
 
 
-class MyForm(FlaskForm):
-    email_field = EmailField("Email address",validators=[DataRequired("必需要有資料")])
-    password_field = PasswordField("請輸入密碼",validators=[DataRequired("必需要有資料"),Length(5,10)])
-    epaper_field = BooleanField("訂閱電子報")
-    submit_field = SubmitField("確定送出")
+
     
-@app.route("/faqs",methods=["GET","POST"])
-def faqs():
-    myForm = MyForm()
-    return render_template('faqs.j2',myform = myForm)
+
 
 @app.route("/about")
 def about():

@@ -1,0 +1,44 @@
+{% extends "_base.j2"%}
+{% block title%}成為可愛會員{% endblock %}
+{% block head %} {{super()}} {% endblock%}
+{% block main %}
+<div class="container">
+    <form method="POST">
+    {{form.csrf_token}}
+        <div class="mb-3">
+        {{form.username.label(class='form-label')}} {{form.username(class='form-control',size=20)}}
+        {% if form.username.errors%}
+            <div class="alert alert-danger" role="alert">
+            名字錯誤了
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{form.email.label(class='form-label')}} {{form.email(class='form-control',size=20)}}
+        {% if form.email.errors%}
+            <div class="alert alert-danger" role="alert">
+            信箱錯誤了
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{form.password.label(class='form-label')}} {{form.password(class='form-control',size=20)}}
+        {% if form.password.errors[0] %}
+            <div class="alert alert-danger" role="alert">
+            密碼錯誤
+            
+            </div>
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{form.confirm.label(class='form-label')}} {{form.confirm(class='form-control',size=20)}}
+    </div>
+    <div>
+    <button type="submit" class="btn btn-primary">送出</button>
+  </div>
+    
+       
+    
+    </form>    
+</div>
+{% endblock %}
